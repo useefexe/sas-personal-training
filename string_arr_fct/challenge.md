@@ -62,7 +62,7 @@
 Écrivez un programme JavaScript qui prend un tableau de chaînes de caractères et affiche pour chaque mot le nombre de voyelles (`a, e, i, o, u, y`) qu'il contient.
 
 * **Exemple :** Pour `["chat", "noeud"]`, le programme doit afficher `chat: 1 voyelle(s), noeud: 3 voyelle(s)`.
-
+                                                         
 ---
 
 ### Challenge 9 : Génération d'Acronyme
