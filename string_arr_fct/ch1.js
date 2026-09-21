@@ -1,3 +1,4 @@
+
 const arr=["pomme", "banane", "extraordinaire", "kiwi"]
 
 function Calclenght(str){
