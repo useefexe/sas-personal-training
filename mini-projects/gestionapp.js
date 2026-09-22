@@ -214,6 +214,7 @@ function serchApprenantbyCom(apparry,skiils){
     }
 }
 
+
 // main program=================================================================================================================================
 let appernant=[]
 let chois=null
@@ -268,7 +269,7 @@ let chois=null
         default:
             console.log('Choix invalide, veuillez reessayer.');
     }
-
+      
     
 }while(chois!=='0')
 
