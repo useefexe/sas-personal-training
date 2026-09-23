@@ -182,33 +182,12 @@ const trips = [
         availableSeats: 50
     }
 ];
-const tickets=[{
-    id: 10,
-    passagename: 'youssef',
-    setnumber: 35,
-    price: 100,
-    depart: 'Marrakech',
-    des: 'Agadir',
-    trajetid: 19
-  },{
-    id: 11,
-    passagename: 'youssef',
-    setnumber: 36,
-    price: 100,
-    depart: 'Marrakech',
-    des: 'Agadir',
-    trajetid: 19
-  },{
-    id: 12,
-    passagename: 'ahmed',
-    setnumber: 33,
-    price: 100,
-    depart: 'Marrakech',
-    des: 'Agadir',
-    trajetid: 19
-  }
+const tickets=[
+  
 ]
+let anulatedicket=[]
 
+let lasttekietId=0
 //============================================================sous functions=======================================================
 //calculer length 
 function calLenght(obs){
@@ -228,6 +207,17 @@ function findindex(idin,arr){
     }
     return index
 }
+// checher le trajet dans les ticket anuller 
+function findanulateticket(idin){
+    let index=-1
+    for (let i = 0; i < calLenght(anulatedicket); i++) {
+        if(anulatedicket[i].trajetid===idin){
+            index=i
+        }  
+    }
+    return index
+}
+
 function findticketbyname(name){
     let rus=[]
     for (let i = 0; i < calLenght(tickets); i++) {
@@ -237,6 +227,18 @@ function findticketbyname(name){
     }
     return  rus
 }
+
+// function Idexiste(id){
+//     let found=false
+//     for (let i = 0; i < lasttekietId.length; i++) {
+//         if (lasttekietId[i]===id) {
+//             found=true 
+//             break
+//         }
+        
+//     }
+//     return found
+// }
 
 
 
@@ -276,19 +278,33 @@ function acheterTicket(){
             let ticket={id:null,passagename:name,setnumber:null,price:trips[index].price,
                 depart:trips[index].departure, des:trips[index].destination,trajetid:trips[index].id
             }
-             ticket.setnumber=Math.floor(Math.random() * 110)
-             let idtrip=1       // check if id not exist
-              do{
-                idtrip=Math.floor(Math.random() * 300)
-              }while(findindex(idtrip,tickets)!==-1)
+            
+            // check if we have a unilate trips in this trjat 
+             let i = findanulateticket(trajet.id) 
+             console.log(anulatedicket)
+             if(i!==-1){
+                ticket.setnumber=anulatedicket[i].setnumber
+              let idtrip=lasttekietId+1  // check if id not exist
+
              ticket.id=idtrip
              trajet.availableSeats-=1
              tickets.push(ticket)
-             
+                anulatedicket.splice(i,1)
+  lasttekietId++
+
+              }else{
+             ticket.setnumber=50-trips[index].availableSeats+1
+             let idtrip=lasttekietId+1   // check if id not exist
+
+             ticket.id=idtrip
+             trajet.availableSeats-=1
+             tickets.push(ticket)
+             lasttekietId++
+             }
              console.log(`tu as rserver une tikete de traget ${trips[index].departure} a ${trips[index].destination}     `)
              console.log(          `.Départ : ${trips[index].arrivalTime}  \n`+
               `.Prix  : ${trips[index].price}  \n`+
-               `.depart : ${trips[index].availableSeats}  \n`+
+               `.depart : ${ticket.des}  \n`+
                 `==================================\n`)
              
            }
@@ -322,7 +338,7 @@ function afficherTicket(){
 function annulerTicket(){
      let tecketid=Number(prompt(" saiser l identifiant de ticket que tu veux abuller "))
      let index=findindex(tecketid,tickets)
-       console.log(index)
+       
      if(index===-1){
           console.log("ticket non trouvable ")
      }else{
@@ -330,6 +346,7 @@ function annulerTicket(){
         tickets.splice(index,1) 
         let trajetindex=findindex(tik.trajetid,trips)
         trips[trajetindex].availableSeats++
+        anulatedicket.push(tik)
          console.log(`ticket avec l identifiant ${tik.id} est suprime`)
 
      }
@@ -400,26 +417,7 @@ function trieTrajet(){
 }
 
 //=====================================================Afficher tous les tickets==============================================================
-function afficherTousTicket() {
-    if (calLenght(tickets) === 0) {
-        console.log("\n=====================================");
-        console.log("  Aucun ticket enregistré actuellement");
-        console.log("=====================================\n");
-        return;
-    }
 
-    console.log("\n=================== LISTE DE TOUS LES TICKETS ===================");
-    for (let i = 0; i < calLenght(tickets); i++) {
-        const ticket = tickets[i];
-        console.log(`[Ticket ID: ${ticket.id}]`);
-        console.log(`   Passager       : ${ticket.passagename}`);
-        console.log(`   Trajet ID      : ${ticket.trajetid}`);
-        console.log(`   Déplacement    : ${ticket.depart} ➔ ${ticket.des}`);
-        console.log(`   Numéro Place   : ${ticket.setnumber}`);
-        console.log(`   Prix Payé      : ${ticket.price} DH`);
-        console.log("-----------------------------------------------------------------");
-    }
-}
 //===============================program principale==============================================================================
 let Choix=11
 do{
@@ -464,5 +462,5 @@ console.log("\n================ MENU ================");
             default:
                 console.log("Option invalide, veuillez réessayer.");
         }
-}while(Choix!==0)
+}while(Choix!=="0")
 
